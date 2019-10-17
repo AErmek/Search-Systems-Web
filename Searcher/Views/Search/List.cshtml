@@ -1,0 +1,32 @@
+﻿@model SearchResultViewModel
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h1>Search result list</h1>
+
+<form asp-action="List" asp-route-searchString="@Model.SearchString" method="get">
+    <input type="text" asp-for="@Model.SearchString" />
+    <button id="submit" value="Submit" type="submit">Search</button>
+</form>
+<ul>
+    @foreach (var result in Model.SearchResults)
+    {
+        await Html.RenderPartialAsync("_SnippetBlock", result);
+    }
+</ul>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="List"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-searchString="@Model.SearchString"
+       class="btn">previous</a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="List"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-searchString="@Model.SearchString"
+       class="btn" type="button">next</a>
+}

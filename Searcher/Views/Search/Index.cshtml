@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Search</h1>
+
+<form asp-action="ShowResults" method="post">
+    <input type="text" name="KeyWord" required/>
+    <button id="submit" value="Submit" type="submit">Search</button>
+</form>

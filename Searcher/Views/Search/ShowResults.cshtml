@@ -1,0 +1,18 @@
+﻿@model IEnumerable<SearchResultDto>
+
+@{
+    ViewBag.Title = "ShowResults";
+}
+
+@{ await Html.RenderPartialAsync("Index");}
+
+@if (Model.Any())
+{
+    <div>@Model.FirstOrDefault()?.BrowserType</div>
+}
+<ul>
+    @foreach (var result in Model)
+    {
+        await Html.RenderPartialAsync("_SnippetBlock", result);
+    }
+</ul>

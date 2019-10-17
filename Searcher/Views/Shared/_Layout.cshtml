@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="UTF-8"/>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        @Html.ActionLink("Home", "Index", "Home")
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+    <footer>
+    </footer>
+    <script src="~/js/jquery-3.4.1.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+﻿body {
+    margin: 5px 10px 5px 10px;
+    font-size: 13px;
+    line-height: 18px;
+    background: #00303e;
+}
+
+body, button, input, select, textarea {
+    font-family: 'Conso', Courier New, monospace;
+    color: #f8f8f2;
+}
+
+header {
+    /*left: 50%;*/
+    /*transform: translateX(-50%);
+    top: 0;
+    position: fixed;*/
+    margin: 0 auto;
+    padding: 5px;
+    background: #002935;
+    border: 2px #00465b solid;
+    width: 98%;
+    border-radius:5px;
+}
+
+    header a {
+        font-size: 20px;
+    }
+
+a {
+    color: #ec007c;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+    a:hover {
+        background-color: #0096c1;
+        color: #00303e;
+    }
+
+h1 {
+    font-size: 25px;
+}
+
+button {
+    color: aqua;
+    text-decoration: none;
+    background: #00303e;
+    border-radius: 5px;
+    border-color: aqua;
+}
+
+    button:hover {
+        background-color: #0096c1;
+        color: #00303e;
+    }
+
+input {
+    background: #00303e;
+    border-radius: 5px;
+}
+
+.snippet-block {
+    width: 500px;
+}
+
+.url {
+    font-size: 15px;
+    color: forestgreen;
+}
+
+.btn {
+    border: 2px aqua solid;
+    padding: 3px;
+    border-radius: 5px;
+}
