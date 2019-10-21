@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Searcher.BLL.DTO;
+using System.Collections.Generic;
 
-namespace Searcher.BLL.DTO.ViewModels
+namespace Searcher.Models.ViewModels
 {
     public class SearchResultViewModel
     {

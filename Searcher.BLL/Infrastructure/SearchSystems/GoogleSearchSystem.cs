@@ -1,46 +1,54 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Searcher.BLL.DTO;
 using Searcher.BLL.Enums;
-using Searcher.BLL.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace Searcher.BLL.DTO.SearchSystems
+namespace Searcher.BLL.Infrastructure.SearchSystems
 {
     public class GoogleSearchSystem : BaseSearchSystem
     {
         const string uriBase = "https://www.googleapis.com/customsearch/v1";
         private readonly string _cx;
 
-        public GoogleSearchSystem() { }
-
-        public GoogleSearchSystem(ApiKeyOptions apiKeyOptions)
+        public GoogleSearchSystem(ILogger logger, string apiKey, string cx)
         {
-            AccessKey = apiKeyOptions.GoogleKey;
-            _cx = apiKeyOptions.GoogleCx;
+            Logger = logger;
+            AccessKey = apiKey;
+            _cx = cx;
+            SearchSystemType = SearchSystemType.Google;
         }
 
         public override List<SearchResultDto> DeserializeResult()
         {
-            dynamic jsonData = JsonConvert.DeserializeObject(TextResult);
-            var results = new List<SearchResultDto>();
-
-            foreach (var item in jsonData.items)
+            try
             {
-                results.Add(new SearchResultDto()
+                dynamic jsonData = JsonConvert.DeserializeObject(TextResult);
+                var results = new List<SearchResultDto>();
+
+                foreach (var item in jsonData.items)
                 {
-                    BrowserType = SearchSystemType.Google,
-                    DateTime = DateTime.Now,
-                    Url = item.link,
-                    Name = item.title,
-                    Snippet = item.snippet
-                });
+                    results.Add(new SearchResultDto()
+                    {
+                        BrowserType = SearchSystemType,
+                        DateTime = DateTime.Now,
+                        Url = item.link,
+                        Name = item.title,
+                        Snippet = item.snippet
+                    });
+                }
+                return results;
             }
-            return results;
+            catch (Exception ex)
+            {
+                throw new Exception($"{SearchSystemType} Exception in Deserializing ({ex.Message})");
+            }
         }
 
-        public override void SearchByKeyWord(string keyWord)
+        protected override void SearchByKeyWord(string keyWord)
         {
             //Thread.Sleep(1000);
             var url = uriBase + @"?key={0}&cx={1}&q={2}";

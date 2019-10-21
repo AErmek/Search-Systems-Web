@@ -1,26 +1,24 @@
-﻿using Searcher.BLL.DTO.SearchSystems;
-using Searcher.BLL.Enums;
-using Searcher.BLL.Infrastructure;
+﻿using Microsoft.Extensions.Logging;
+using Searcher.BLL.Infrastructure.SearchSystems;
 using Searcher.BLL.Interfaces;
-using System;
 
-namespace Searcher.BLL.DTO
+namespace Searcher.BLL.Infrastructure.Helpers
 {
-    public class SearchSystemFactory : IFactory<BaseSearchSystem, Options>
+    public class SearchSystemFactory : ISearchSystemFactory
     {
-        public BaseSearchSystem Create(Options options)
+        public ISearchSystem InitSearchSystemBing(ILogger logger, string apiKey)
         {
-            switch (options.Type)
-            {
-                case SearchSystemType.Yandex:
-                    return new YandexSearchSystem(options.ApiKeyOptions);
-                case SearchSystemType.Google:
-                    return new GoogleSearchSystem(options.ApiKeyOptions);
-                case SearchSystemType.Bing:
-                    return new BingSearchSystem(options.ApiKeyOptions);
-                default:
-                    throw new NotSupportedException();
-            }
+            return new BingSearchSystem(logger, apiKey);
+        }
+
+        public ISearchSystem InitSearchSystemGoogle(ILogger logger, string apiKey, string cx)
+        {
+            return new GoogleSearchSystem(logger, apiKey, cx);
+        }
+
+        public ISearchSystem InitSearchSystemYandex(ILogger logger, string apiKey, string user)
+        {
+            return new YandexSearchSystem(logger, apiKey, user);
         }
     }
 }

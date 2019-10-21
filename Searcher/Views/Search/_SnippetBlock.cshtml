@@ -1,7 +1,14 @@
 ﻿@model SearchResultDto
 
 <li class="snippet-block">
-    <a href="@Model.Url">@Model.Name</a><br />
-    <span class="url">@Model.Url</span><br />
-    <span>@Model.Snippet</span>
+    <dl>
+        <dt>@Html.DisplayNameFor(x => x.Name)</dt>
+        <dd><a href="@Model.Url">@Model.Name</a></dd>
+
+        <dt>@Html.DisplayNameFor(x => x.Url)</dt>
+        <dd><span class="url">@Model.Url</span></dd>
+
+        <dt>@Html.DisplayNameFor(x => x.Snippet)</dt>
+        <dd><span>@Model.Snippet</span></dd>
+    </dl>
 </li>

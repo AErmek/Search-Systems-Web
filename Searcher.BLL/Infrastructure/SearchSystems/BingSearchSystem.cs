@@ -1,44 +1,52 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Searcher.BLL.DTO;
 using Searcher.BLL.Enums;
-using Searcher.BLL.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace Searcher.BLL.DTO.SearchSystems
+namespace Searcher.BLL.Infrastructure.SearchSystems
 {
     public class BingSearchSystem : BaseSearchSystem
     {
         const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
-        public BingSearchSystem() { }
-
-        public BingSearchSystem(ApiKeyOptions apiKeyOptions)
+        public BingSearchSystem(ILogger logger, string apiKey)
         {
-            AccessKey = apiKeyOptions.BingKey;
+            Logger = logger;
+            AccessKey = apiKey;
+            SearchSystemType = SearchSystemType.Bing;
         }
 
         public override List<SearchResultDto> DeserializeResult()
         {
-            dynamic jsonData = JsonConvert.DeserializeObject(TextResult);
-            var results = new List<SearchResultDto>();
-
-            foreach (var item in jsonData.webPages?.value)
+            try
             {
-                results.Add(new SearchResultDto()
+                dynamic jsonData = JsonConvert.DeserializeObject(TextResult);
+                var results = new List<SearchResultDto>();
+
+                foreach (var item in jsonData.webPages?.value)
                 {
-                    BrowserType = SearchSystemType.Bing,
-                    DateTime = DateTime.Now,
-                    Url = item.url,
-                    Name = item.name,
-                    Snippet = item.snippet
-                });
+                    results.Add(new SearchResultDto()
+                    {
+                        BrowserType = SearchSystemType,
+                        DateTime = DateTime.Now,
+                        Url = item.url,
+                        Name = item.name,
+                        Snippet = item.snippet
+                    });
+                }
+                return results;
             }
-            return results;
+            catch (Exception ex)
+            {
+                throw new Exception($"{SearchSystemType} Exception in Deserializing ({ex.Message})");
+            }
         }
 
-        public override void SearchByKeyWord(string keyWord)
+        protected override void SearchByKeyWord(string keyWord)
         {
             //Thread.Sleep(1000);
             var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(keyWord);

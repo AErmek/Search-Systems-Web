@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Searcher.BLL.DTO
+namespace Searcher.BLL.Infrastructure
 {
     public class State
     {

@@ -1,9 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Searcher.BLL.DTO;
-using Searcher.BLL.DTO.SearchSystems;
 using Searcher.BLL.Enums;
+using Searcher.BLL.Infrastructure;
+using Searcher.BLL.Infrastructure.Helpers;
+using Searcher.BLL.Infrastructure.SearchSystems;
+using Searcher.BLL.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Searcher.Test.BLL
 {
@@ -36,88 +40,58 @@ namespace Searcher.Test.BLL
     [TestClass]
     public class BaseSearchSystemTest
     {
-        string textResultYandex;
-        string textResultGoogle;
-        string textResultBing;
+        ApiKeyOptions options;
         [TestInitialize]
         public void SetUp()
         {
-            textResultYandex =
-                "<?xml version=\"1.0\" encoding=\"utf - 8\"?>" +
-                "<yandexsearch version=\"1.0\">" +
-                "<response>" +
-                "<results>" +
-                "<grouping>" +
-                "<group>" +
-                "<doc>" +
-                "<url>https://techcrunch.com/</url>" +
-                "<title>Title</title>" +
-                "<passages>" +
-                "<passage>Passage</passage>" +
-                "</passages>" +
-                "</doc>" +
-                "</group>" +
-                "</grouping>" +
-                "</results>" +
-                "</response>" +
-                "</yandexsearch>";
-
-            textResultGoogle = "{\"items\":[{\"link\":\"http:...\",\"title\":\"Title\",\"snippet\":\"Snippet\"}]}";
-            textResultBing = "{\"webPages\":{value:[{\"url\":\"http:...\",\"name\":\"Title\",\"snippet\":\"Snippet\"}]}}";
+            options = new ApiKeyOptions
+            {
+                YandexKey = "03.965152905:d22d4b2900f386d57c71e5cc744029e7",
+                YandexUser = "ermek_akmatov@inbox.ru",
+                GoogleKey = "AIzaSyB148E2gOgvQ-uDXrHPUdIncOY0mOQEJSs",
+                GoogleCx = "004371770683300358078:ficqkfdm1xk"
+            };
         }
 
         [TestMethod]
-        public void Test_YandexDeserialize()
+        public void Test_YandexSearch()
         {
-            BaseSearchSystem searchSystem = new YandexSearchSystem() { TextResult = textResultYandex };
-            var result = searchSystem.DeserializeResult();
+            var searchSystems = new List<ISearchSystem> { new YandexSearchSystem(null, options.YandexKey, options.YandexUser) };
+            SearchExecuter searchExecuter = new SearchExecuter(searchSystems);
+            var searchResults = searchExecuter.ExecuteSearch("Pi").Take(1).ToList();
 
             var manualResult = new List<SearchResultDto>(){
                 new SearchResultDto{
                 BrowserType = SearchSystemType.Yandex,
-                Name = "Title",
-                Url = "https://techcrunch.com/",
-                Snippet = "Passage",
-                DateTime = result[0].DateTime
+                Name = "Пи (число) — Википедия",
+                Url = "https://ru.wikipedia.org/wiki/%D0%9F%D0%B8_(%D1%87%D0%B8%D1%81%D0%BB%D0%BE)",
+                Snippet = "π {\\displaystyle \\pi }. Десятичная.\nЧисло. π {\\displaystyle \\pi }.",
+                DateTime = searchResults[0].DateTime
             }};
 
-            CollectionAssert.AreEqual(manualResult, result, new SearchResultComparer());
+            CollectionAssert.AreEqual(manualResult, searchResults, new SearchResultComparer());
         }
 
         [TestMethod]
-        public void Test_GoogleDeserialize()
+        public void Test_GoogleSearch()
         {
-            BaseSearchSystem searchSystem = new GoogleSearchSystem() { TextResult = textResultGoogle };
-            var result = searchSystem.DeserializeResult();
+            var searchSystems = new List<ISearchSystem> { new GoogleSearchSystem(null, options.GoogleKey, options.GoogleCx) };
+            SearchExecuter searchExecuter = new SearchExecuter(searchSystems);
+            var searchResults = searchExecuter.ExecuteSearch("game").Take(1).ToList();
 
             var manualResult = new List<SearchResultDto>(){
                 new SearchResultDto{
                 BrowserType = SearchSystemType.Google,
-                Name = "Title",
-                Url = "http:...",
-                Snippet = "Snippet",
-                DateTime = result[0].DateTime
+                Name = "Connected games",
+                Url = "https://www.google.com/appserve/mkt/p/AFnwnKUnXD1ji46geUqp7D9dO_-JdN-nkd-9-tW67x-ubTby1HUZpTyHG9o4tXFXHXLGbfH6wSWIt7VOmmtywryT8NAxxMXmx8Rn4q5-8ygMVFsqZsWrTZ7irqvsJ6ZnL31Ck4qfCHEFR92FfxnoEBgh4-U4jC7TwGNU2y1xfJd9UgrSxF1QUQeNw0jY",
+                Snippet = "The next generation of multiplayer games and beyond with Unity and Google \nCloud.",
+                DateTime = searchResults[0].DateTime
             }};
 
-            CollectionAssert.AreEqual(manualResult, result, new SearchResultComparer());
+            CollectionAssert.AreEqual(manualResult, searchResults, new SearchResultComparer());
         }
 
-        [TestMethod]
-        public void Test_BingDeserialize()
-        {
-            BaseSearchSystem searchSystem = new BingSearchSystem() { TextResult = textResultBing };
-            var result = searchSystem.DeserializeResult();
 
-            var manualResult = new List<SearchResultDto>(){
-                new SearchResultDto{
-                BrowserType = SearchSystemType.Bing,
-                Name = "Title",
-                Url = "http:...",
-                Snippet = "Snippet",
-                DateTime = result[0].DateTime
-            }};
-
-            CollectionAssert.AreEqual(manualResult, result, new SearchResultComparer());
-        }
+        //Bing search was not tested , because trial version was finished
     }
 }

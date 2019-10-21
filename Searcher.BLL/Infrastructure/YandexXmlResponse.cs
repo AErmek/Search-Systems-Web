@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Searcher.BLL.DTO
+namespace Searcher.BLL.Infrastructure
 {
     [Serializable()]
     public class Doc

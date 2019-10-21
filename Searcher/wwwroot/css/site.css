@@ -20,7 +20,7 @@ header {
     background: #002935;
     border: 2px #00465b solid;
     width: 98%;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
     header a {
@@ -73,4 +73,35 @@ input {
     border: 2px aqua solid;
     padding: 3px;
     border-radius: 5px;
+}
+
+.found-search-system{
+    padding-top:20px;
+    padding-left:40px;
+    font-size:20px;
+    font-weight:bold;
+    color:gold;
+}
+
+dl {
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0
+}
+
+dt {
+    float: left;
+    width: 20%;
+    /* adjust the width; make sure the total of both is 100% */
+    
+    padding: 0;
+    margin: 0
+}
+
+dd {
+    float: left;
+    width: 80%;
+    /* adjust the width; make sure the total of both is 100% */
+    margin: 0
 }

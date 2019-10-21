@@ -8,11 +8,11 @@
 
 @if (Model.Any())
 {
-    <div>@Model.FirstOrDefault()?.BrowserType</div>
+    <div class="found-search-system">@Model.FirstOrDefault()?.BrowserType</div>
 }
-<ul>
+<ol>
     @foreach (var result in Model)
     {
         await Html.RenderPartialAsync("_SnippetBlock", result);
     }
-</ul>
+</ol>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Searcher.BLL.DTO.ViewModels
+namespace Searcher.Models.ViewModels
 {
     public class PageViewModel
     {

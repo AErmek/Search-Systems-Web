@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Searcher.BLL.Infrastructure;
 using Searcher.BLL.Interfaces;
 using Searcher.BLL.Services;
@@ -17,12 +18,12 @@ namespace Searcher
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
-
+        public readonly ILoggerFactory _loggerFactory;
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -54,11 +55,10 @@ namespace Searcher
             }
             else
             {
-
                 app.UseHsts();
             }
 
-            app.ConfigureExceptionHandler();
+            app.ConfigureExceptionHandler(_loggerFactory);
 
             InitializeDatabase(app);
 
