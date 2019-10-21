@@ -105,3 +105,7 @@ dd {
     /* adjust the width; make sure the total of both is 100% */
     margin: 0
 }
+
+.ul-without-dots {
+    list-style-type: none;
+}

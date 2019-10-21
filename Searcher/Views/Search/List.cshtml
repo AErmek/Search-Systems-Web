@@ -10,16 +10,12 @@
     <input type="text" asp-for="@Model.SearchString" />
     <button id="submit" value="Submit" type="submit">Search</button>
 </form>
-@if (Model.SearchResults.Any())
-{
-    <div class="found-search-system">@Model.SearchResults.FirstOrDefault()?.BrowserType</div>
-}
-<ol>
+<ul class="ul-without-dots">
     @foreach (var result in Model.SearchResults)
     {
         await Html.RenderPartialAsync("_SnippetBlock", result);
     }
-</ol>
+</ul>
 @if (Model.PageViewModel.HasPreviousPage)
 {
     <a asp-action="List"
